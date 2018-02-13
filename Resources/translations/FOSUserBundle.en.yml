@@ -6,9 +6,9 @@ group:
     new:
         submit: 'Create group'
     flash:
-        updated: 'The group has been updated'
-        created: 'The group has been created'
-        deleted: 'The group has been deleted'
+        updated: 'The group has been updated.'
+        created: 'The group has been created.'
+        deleted: 'The group has been deleted.'
 
 security:
     login:
@@ -24,20 +24,37 @@ profile:
     edit:
         submit: Update
     flash:
-        updated: 'The profile has been updated'
+        updated: 'The profile has been updated.'
 
 change_password:
     submit: 'Change password'
     flash:
-        success: 'The password has been changed'
+        success: 'The password has been changed.'
+
+email_update:
+    flash:
+        info: 'Please check the inbox of your new email address and click the link in the confirmation email.'
+        success: 'E-mail was successfully updated'
+    error:
+        message: 'Invalid confirmation link. Can not update the email address.'
+    email:
+        subject: 'Confirm the activation of the new email address.'
+        message: |
+            Hello %username%!
+
+            To activate your new email address - please visit %confirmationUrl%
+
+            Kind regards,
+            the Team.
 
 registration:
-    check_email: 'An email has been sent to %email%. It contains an activation link you must click to activate your account.'
+    check_email: |
+        An email has been sent to %email%. It contains an activation link you must click to activate your account.
     confirmed: 'Congrats %username%, your account is now activated.'
     back: 'Back to the originating page.'
     submit: Register
     flash:
-        user_created: 'The user has been created successfully'
+        user_created: 'The user has been created successfully.'
     email:
         subject: 'Welcome %username%!'
         message: |
@@ -45,14 +62,15 @@ registration:
 
             To finish activating your account - please visit %confirmationUrl%
 
+            This link can only be used once to validate your account.
+
             Regards,
             the Team.
 
 resetting:
-    password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
     check_email: |
         An email has been sent. It contains a link you must click to reset your password.
-        Note: You can only request a new password within %tokenLifetime% hours.
+        Note: You can only request a new password once within %tokenLifetime% hours.
 
         If you don't get an email check your spam folder or try again.
     request:
@@ -61,7 +79,7 @@ resetting:
     reset:
         submit: 'Change password'
     flash:
-        success: 'The password has been reset successfully'
+        success: 'The password has been reset successfully.'
     email:
         subject: 'Reset Password'
         message: |

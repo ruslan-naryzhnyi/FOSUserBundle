@@ -88,20 +88,44 @@ class TwigSwiftMailer implements MailerInterface
     }
 
     /**
+     * Send confirmation link to specified new user email.
+     *
+     * @param UserInterface $user
+     * @param $confirmationUrl
+     * @param $toEmail
+     *
+     * @return bool
+     */
+    public function sendUpdateEmailConfirmation(UserInterface $user, $confirmationUrl, $toEmail)
+    {
+        $template = $this->parameters['template']['email_updating'];
+        $context = array(
+            'user' => $user,
+            'confirmationUrl' => $confirmationUrl,
+        );
+
+        $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $toEmail);
+    }
+
+    /**
      * @param string $templateName
      * @param array  $context
-     * @param string $fromEmail
+     * @param array  $fromEmail
      * @param string $toEmail
      */
     protected function sendMessage($templateName, $context, $fromEmail, $toEmail)
     {
-        $context = $this->twig->mergeGlobals($context);
-        $template = $this->twig->loadTemplate($templateName);
+        $template = $this->twig->load($templateName);
         $subject = $template->renderBlock('subject', $context);
         $textBody = $template->renderBlock('body_text', $context);
-        $htmlBody = $template->renderBlock('body_html', $context);
 
-        $message = \Swift_Message::newInstance()
+        $htmlBody = '';
+
+        if ($template->hasBlock('body_html', $context)) {
+            $htmlBody = $template->renderBlock('body_html', $context);
+        }
+
+        $message = (new \Swift_Message())
             ->setSubject($subject)
             ->setFrom($fromEmail)
             ->setTo($toEmail);

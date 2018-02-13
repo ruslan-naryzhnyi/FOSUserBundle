@@ -72,8 +72,6 @@ to enter one. An example of using this command is listed below.
 
 .. code-block:: bash
 
-    $ php app/console fos:user:activate testuser
-    $ # OR if you are using Symfony >= 2.8 with the new directory structure
     $ php bin/console fos:user:activate testuser
 
 Deactivate a User
@@ -86,8 +84,6 @@ to enter one. Below is an example of using this command.
 
 .. code-block:: bash
 
-    $ php app/console fos:user:deactivate testuser
-    $ # OR if you are using Symfony >= 2.8 with the new directory structure
     $ php bin/console fos:user:deactivate testuser
 
 Promote a User
@@ -117,6 +113,10 @@ prompt will ask you to enter them.
 .. note::
 
     You may not specify the ``role`` argument and the ``--super`` option simultaneously.
+    
+.. caution::
+
+    Changes will not be applied until the user logs out and back in again.
 
 Demote a User
 -------------
@@ -146,6 +146,12 @@ prompt will ask you to enter them.
 .. note::
 
     You may not specify the ``role`` argument and the ``--super`` option simultaneously.
+    
+.. caution::
+
+    Changes will not be applied until the user logs out and back in again. This has 
+    implications for the way in which you configure sessions in your application since
+    you want to ensure that users are demoted as quickly as possible.
 
 Change a User's Password
 ------------------------

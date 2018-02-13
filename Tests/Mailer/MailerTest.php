@@ -12,11 +12,12 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\Mailer;
+use PHPUnit\Framework\TestCase;
 use Swift_Events_EventDispatcher;
 use Swift_Mailer;
 use Swift_Transport_NullTransport;
 
-class MailerTest extends \PHPUnit_Framework_TestCase
+class MailerTest extends TestCase
 {
     /**
      * @dataProvider goodEmailProvider
@@ -31,7 +32,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException Swift_RfcComplianceException
+     * @expectedException \Swift_RfcComplianceException
      */
     public function testSendConfirmationEmailMessageWithBadEmails($emailAddress)
     {
@@ -52,12 +53,30 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException Swift_RfcComplianceException
+     * @expectedException \Swift_RfcComplianceException
      */
     public function testSendResettingEmailMessageWithBadEmails($emailAddress)
     {
         $mailer = $this->getMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
+    }
+
+    public function goodEmailProvider()
+    {
+        return array(
+            array('foo@example.com'),
+            array('foo@example.co.uk'),
+            array($this->getEmailAddressValueObject('foo@example.com')),
+            array($this->getEmailAddressValueObject('foo@example.co.uk')),
+        );
+    }
+
+    public function badEmailProvider()
+    {
+        return array(
+            array('foo'),
+            array($this->getEmailAddressValueObject('foo')),
+        );
     }
 
     private function getMailer()
@@ -112,23 +131,5 @@ class MailerTest extends \PHPUnit_Framework_TestCase
         ;
 
         return $emailAddress;
-    }
-
-    public function goodEmailProvider()
-    {
-        return array(
-            array('foo@example.com'),
-            array('foo@example.co.uk'),
-            array($this->getEmailAddressValueObject('foo@example.com')),
-            array($this->getEmailAddressValueObject('foo@example.co.uk')),
-        );
-    }
-
-    public function badEmailProvider()
-    {
-        return array(
-            array('foo'),
-            array($this->getEmailAddressValueObject('foo')),
-        );
     }
 }

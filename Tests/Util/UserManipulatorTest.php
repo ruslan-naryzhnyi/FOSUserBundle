@@ -14,8 +14,9 @@ namespace FOS\UserBundle\Tests\Util;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Tests\TestUser;
 use FOS\UserBundle\Util\UserManipulator;
+use PHPUnit\Framework\TestCase;
 
-class UserManipulatorTest extends \PHPUnit_Framework_TestCase
+class UserManipulatorTest extends TestCase
 {
     public function testCreate()
     {
@@ -78,7 +79,7 @@ class UserManipulatorTest extends \PHPUnit_Framework_TestCase
         $manipulator->activate($username);
 
         $this->assertSame($username, $user->getUsername());
-        $this->assertSame(true, $user->isEnabled());
+        $this->assertTrue($user->isEnabled());
     }
 
     /**
@@ -132,7 +133,7 @@ class UserManipulatorTest extends \PHPUnit_Framework_TestCase
         $manipulator->deactivate($username);
 
         $this->assertSame($username, $user->getUsername());
-        $this->assertSame(false, $user->isEnabled());
+        $this->assertFalse($user->isEnabled());
     }
 
     /**
@@ -186,7 +187,7 @@ class UserManipulatorTest extends \PHPUnit_Framework_TestCase
         $manipulator->promote($username);
 
         $this->assertSame($username, $user->getUsername());
-        $this->assertSame(true, $user->isSuperAdmin());
+        $this->assertTrue($user->isSuperAdmin());
     }
 
     /**
@@ -240,7 +241,7 @@ class UserManipulatorTest extends \PHPUnit_Framework_TestCase
         $manipulator->demote($username);
 
         $this->assertSame($username, $user->getUsername());
-        $this->assertSame(false, $user->isSuperAdmin());
+        $this->assertFalse($user->isSuperAdmin());
     }
 
     /**

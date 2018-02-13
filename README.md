@@ -7,16 +7,13 @@ common tasks such as user registration and password retrieval.
 
 Features include:
 
-- Users can be stored via Doctrine ORM, MongoDB/CouchDB ODM or Propel
+- Users can be stored via Doctrine ORM or MongoDB/CouchDB ODM
 - Registration support, with an optional confirmation per email
 - Password reset support
 - Unit tested
 
 **Note:** This bundle does *not* provide an authentication system but can
 provide the user provider for the core [SecurityBundle](https://symfony.com/doc/current/book/security.html).
-
-**Caution:** This bundle is developed in sync with [symfony's repository](https://github.com/symfony/symfony).
-For Symfony 2.0.x, you need to use the 1.2.0 release of the bundle (or lower)
 
 [![Build Status](https://travis-ci.org/FriendsOfSymfony/FOSUserBundle.svg?branch=master)](https://travis-ci.org/FriendsOfSymfony/FOSUserBundle) [![Total Downloads](https://poser.pugx.org/friendsofsymfony/user-bundle/downloads.svg)](https://packagist.org/packages/friendsofsymfony/user-bundle) [![Latest Stable Version](https://poser.pugx.org/friendsofsymfony/user-bundle/v/stable.svg)](https://packagist.org/packages/friendsofsymfony/user-bundle)
 
@@ -38,9 +35,7 @@ All the installation instructions are located in the documentation.
 License
 -------
 
-This bundle is under the MIT license. See the complete license in the bundle:
-
-    Resources/meta/LICENSE
+This bundle is under the MIT license. See the complete license [in the bundle](LICENSE)
 
 About
 -----

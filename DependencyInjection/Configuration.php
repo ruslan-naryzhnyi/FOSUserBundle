@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\DependencyInjection;
 
-use FOS\UserBundle\Util\LegacyFormHelper;
+use FOS\UserBundle\Form\Type;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -34,7 +34,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('fos_user');
 
-        $supportedDrivers = array('orm', 'mongodb', 'couchdb', 'propel', 'custom');
+        $supportedDrivers = array('orm', 'mongodb', 'couchdb', 'custom');
 
         $rootNode
             ->children()
@@ -50,14 +50,15 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('firewall_name')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('model_manager_name')->defaultNull()->end()
+                ->booleanNode('use_authentication_listener')->defaultTrue()->end()
                 ->booleanNode('use_listener')->defaultTrue()->end()
                 ->booleanNode('use_flash_notifications')->defaultTrue()->end()
                 ->booleanNode('use_username_form_type')->defaultTrue()->end()
                 ->arrayNode('from_email')
-                    ->addDefaultsIfNotSet()
+                    ->isRequired()
                     ->children()
-                        ->scalarNode('address')->defaultValue('webmaster@example.com')->cannotBeEmpty()->end()
-                        ->scalarNode('sender_name')->defaultValue('webmaster')->cannotBeEmpty()->end()
+                        ->scalarNode('address')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('sender_name')->isRequired()->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end()
@@ -100,12 +101,20 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->fixXmlConfig('validation_group')
                             ->children()
-                                ->scalarNode('type')->defaultValue(LegacyFormHelper::getType('FOS\UserBundle\Form\Type\ProfileFormType'))->end()
+                                ->scalarNode('type')->defaultValue(Type\ProfileFormType::class)->end()
                                 ->scalarNode('name')->defaultValue('fos_user_profile_form')->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
                                     ->defaultValue(array('Profile', 'Default'))
                                 ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('email_update_confirmation')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->booleanNode('enabled')->defaultFalse()->end()
+                                ->scalarNode('cypher_method')->defaultNull()->end()
+                                ->scalarNode('email_template')->defaultValue('@FOSUser/Profile/email_update_confirmation.txt.twig')->end()
                             ->end()
                         ->end()
                     ->end()
@@ -128,7 +137,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->booleanNode('enabled')->defaultFalse()->end()
-                                ->scalarNode('template')->defaultValue('FOSUserBundle:Registration:email.txt.twig')->end()
+                                ->scalarNode('template')->defaultValue('@FOSUser/Registration/email.txt.twig')->end()
                                 ->arrayNode('from_email')
                                     ->canBeUnset()
                                     ->children()
@@ -141,7 +150,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('type')->defaultValue(LegacyFormHelper::getType('FOS\UserBundle\Form\Type\RegistrationFormType'))->end()
+                                ->scalarNode('type')->defaultValue(Type\RegistrationFormType::class)->end()
                                 ->scalarNode('name')->defaultValue('fos_user_registration_form')->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
@@ -165,11 +174,12 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->canBeUnset()
                     ->children()
+                        ->scalarNode('retry_ttl')->defaultValue(7200)->end()
                         ->scalarNode('token_ttl')->defaultValue(86400)->end()
                         ->arrayNode('email')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('template')->defaultValue('FOSUserBundle:Resetting:email.txt.twig')->end()
+                                ->scalarNode('template')->defaultValue('@FOSUser/Resetting/email.txt.twig')->end()
                                 ->arrayNode('from_email')
                                     ->canBeUnset()
                                     ->children()
@@ -182,7 +192,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('type')->defaultValue(LegacyFormHelper::getType('FOS\UserBundle\Form\Type\ResettingFormType'))->end()
+                                ->scalarNode('type')->defaultValue(Type\ResettingFormType::class)->end()
                                 ->scalarNode('name')->defaultValue('fos_user_resetting_form')->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
@@ -209,7 +219,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('type')->defaultValue(LegacyFormHelper::getType('FOS\UserBundle\Form\Type\ChangePasswordFormType'))->end()
+                                ->scalarNode('type')->defaultValue(Type\ChangePasswordFormType::class)->end()
                                 ->scalarNode('name')->defaultValue('fos_user_change_password_form')->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()
@@ -260,7 +270,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->fixXmlConfig('validation_group')
                             ->children()
-                                ->scalarNode('type')->defaultValue(LegacyFormHelper::getType('FOS\UserBundle\Form\Type\GroupFormType'))->end()
+                                ->scalarNode('type')->defaultValue(Type\GroupFormType::class)->end()
                                 ->scalarNode('name')->defaultValue('fos_user_group_form')->end()
                                 ->arrayNode('validation_groups')
                                     ->prototype('scalar')->end()

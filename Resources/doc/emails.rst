@@ -24,6 +24,35 @@ To enable it, update your configuration as follows:
             confirmation:
                 enabled: true
 
+Confirmation of Changed Email
+-----------------------------
+
+When a user changes their email address on the edit profile page,
+the bundle can send a confirmation email to the new address. The
+new address will only be activated / written to the database once
+the user clicks on the confirmation link in the confirmation email.
+
+Requiring email update confirmation is turned off by default.
+To enable it, update your configuration as follows:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+    fos_user:
+        # ...
+        profile:
+            email_update_confirmation:
+                enabled: true
+
+When clicking the confirmation-link, the user has to be logged in. For the best
+user experience it is recommended to protect the url of the route `fos_user_update_email_confirm`
+in the security configuration.
+
+.. code-block:: yaml
+    security:
+        access_control:
+            - { path: "/{YOUR-PREFIX}/profile/confirm-email-update/{token}", roles: IS_AUTHENTICATED_REMEMBERED }
+
 Password Reset
 --------------
 
@@ -129,7 +158,7 @@ of referencing the email template below.
                 template:   email/password_resetting.email.twig
         registration:
             confirmation:
-                template:   FOSUserBundle:Registration:email.txt.twig
+                template:   '@FOSUser/Registration/email.txt.twig'
 
 .. code-block:: html+jinja
 
@@ -163,8 +192,8 @@ of referencing the email template below.
     not empty.
 
 You can view the default email templates at
-`FOSUserBundle:Registration:email.txt.twig` and
-`FOSUserBundle:Resetting:email.txt.twig`
+`@FOSUser/Registration/email.txt.twig` and
+`@FOSUser/Resetting/email.txt.twig`
 
 Using A Custom Mailer
 ---------------------

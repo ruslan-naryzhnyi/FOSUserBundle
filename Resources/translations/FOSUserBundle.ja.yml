@@ -36,12 +36,23 @@ registration:
         user_created: ユーザーの作成が完了しました
     email:
         subject: '%username% さん、ようこそ!'
-        message: "こんにちは %username% さん!\n\nアカウントを有効化するには、次の確認 URL へアクセスしてください %confirmationUrl%\n\n\n開発チーム\n"
+        message: |
+            こんにちは %username% さん!
+
+            アカウントを有効化するには、次の確認 URL へアクセスしてください %confirmationUrl%
+
+            このリンクは一度しか使用できません。
+
+            開発チーム
+
 resetting:
-    password_already_requested: 'このユーザーのパスワードは 24 時間以内ですでにリクエストされています。'
-    check_email: '%email% 宛にメールを送信しました。メールに記載された確認 URL にアクセスして、アカウントを有効化してください。'
+    check_email: |
+        メールが送信されました。送信されたリンクをクリックしてパスワードをリセットして下さい。
+        注意：パスワードのリセットは %tokenLifetime% 時間のあいだに一度しか要求できません。
+
+        もしメールが届かない場合は、迷惑メールフォルダをご確認いただき、その上で再度やり直して下さい。
     request:
-        username: ユーザー名かメールアドレス
+        username: ユーザー名またはメールアドレス
         submit: パスワードのリセット
     reset:
         submit: パスワードの変更
@@ -49,7 +60,15 @@ resetting:
         success: パスワードのリセットが完了しました
     email:
         subject: パスワードのリセット
-        message: "こんにちは %username% さん!\n\nパスワードをリセットするには、次のリセット URL へアクセスしてください %confirmationUrl%\n\n\n開発チーム\n"
+        message: |
+            こんにちは %username% さん!
+
+            パスワードをリセットするには、次のリセット URL へアクセスしてください %confirmationUrl%
+
+
+            開発チーム
+
+# Global strings
 layout:
     logout: ログアウト
     login: ログイン
